@@ -13,6 +13,9 @@
 		<?php
             try {
 
+                // Show nav menu
+                echo_nav();
+
                 // Get product name
                 $product = (
                     isset($_POST["product"]) &&
@@ -43,20 +46,47 @@
 
                 // Connect to database
                 require_once ("settings.php");
-                $conn = @mysqli_connect($host,$user,$pwd,$dbnm);
-                if (!$conn) throw new Exception("Failed to connect to database");
+                $conn = new mysqli($host,$user,$pwd,$dbnm);
+                if ($conn->connect_error) throw new Exception("Failed to connect to database: ".$conn->connect_error);
 
-                // Show nav menu
-                echo_nav();
+                // Prepare and bind SQL statement
+                $stmt = $conn->prepare("
+                    SELECT SalesId,ProductId,Price,Quantity,Date
+                    FROM Sales
+                    WHERE ProductId=? AND Price=? AND Quantity=? AND Date=?
+                    ORDER BY Date,SalesId");
+                $stmt->bind("sids",$product,$quantity,$price,$date)
 
+                // Execute statement and bind results
+                $stmt->execute();
+                $stmt->bind_result($saleid,$product,$quantity,$price,$date);
 
+                // Bind and fetch the results
+                echo "
+                <table>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Date</th>
+                    </tr>";
+                while ($stmt->fetch()) {
+                    echo "
+                    <tr>
+                        <td>".$product."</td>
+                        <td>".$quantity."</td>
+                        <td>".$price."</td>
+                        <td>".$date."</td>
+                    </tr>";
+                };
+                echo "</table>";
 
-
-                // close the database connection
-                mysqli_close($conn);
+                // Close everything
+                $stmt->close();
+                $conn->close();
 
             } catch(Exception $e) {
-                echo "Oops! Something went wrong: " . $e->getMessage();
+                echo "Oops! Something went wrong: ".$e->getMessage();
             }
 		?>
 	</body>
