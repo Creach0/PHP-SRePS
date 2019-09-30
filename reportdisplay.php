@@ -4,22 +4,20 @@
   //$conn = mysqli_connect($host, $user, $pwd, $database) or die ('Failed to connect to the database');
 
   $date_in_seconds = strtotime($_POST['end_date']);
-  $end_date = date('d/m/y', $date_in_seconds);
+  $end_date = date('Y-m-d', $date_in_seconds);
   $length = $_POST['length'];
 
   switch($length)
   {
     case "week":
       // gets the date a week before
-      $start_date = date('d/m/y', $date_in_seconds - 604800);
+      $start_date = date('Y-m-d', $date_in_seconds - 604800);
       break;
     case "month":
       // gets the date a month before
-      $start_date = date('d/m/y', $date_in_seconds - 2629746);
+      $start_date = date('Y-m-d', $date_in_seconds - 2629746);
       break;
   }
-
-  echo $start_date . "   " . $end_date;
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +28,6 @@
 
 	<body>
 		<h1>Generated Report</h1>
-    
+
 	</body>
 </html>
