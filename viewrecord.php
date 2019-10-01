@@ -53,7 +53,11 @@
                 $stmt = $conn->prepare("
                     SELECT SalesId,ProductId,Price,Quantity,Date
                     FROM Sales
-                    WHERE ProductId=? AND Price=? AND Quantity=? AND Date=?
+                    WHERE
+                        ProductId IN (SELECT ProductId FROM Products WHERE ProductName=?)
+                        AND Price=?
+                        AND Quantity=?
+                        AND Date=?
                     ORDER BY Date,SalesId");
                 $stmt->bind("sids",$product,$quantity,$price,$date)
 
@@ -77,6 +81,12 @@
                         <td>".$quantity."</td>
                         <td>".$price."</td>
                         <td>".$date."</td>
+                        <td>
+                            <form id=\"editrecord\" method=\"post\" action=\"editrecord.php\">
+                            <input type=\"hidden\" id=\"saleid\" value=\"".$saleid."\" /><br />
+                            <input type=\"submit\" value=\"Edit\" />
+                            </form>
+                        </td>
                     </tr>";
                 };
                 echo "</table>";
