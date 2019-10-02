@@ -13,9 +13,9 @@ CREATE TABLE Products(
 
 CREATE TABLE Sales(
 	SalesId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	ProductId INT FOREIGN KEY REFERENCES Products(ProductId),
+	ProductId INT,
 	Price DECIMAL(6,2) NOT NULL,
 	Quantity INT NOT NULL,
-	Date DATE NOT NULL
-	FOREIGN KEY (ProductId) REFERENCES Product(ProductId)
+	Date DATE NOT NULL,
+	FOREIGN KEY (ProductId) REFERENCES Products(ProductId)
 );
