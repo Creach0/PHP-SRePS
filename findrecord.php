@@ -28,7 +28,7 @@
 				<input type="date" name="date" id="date" /><br />
 
 				<p>
-					<input type="submit" value="Login" />
+					<input type="submit" value="Search" />
 					<input type="reset" value="Clear" />
 				</p>
 

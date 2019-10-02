@@ -1,7 +1,6 @@
 <?php
 	session_start();
 	include_once("common.php");
-	include_once("settings.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,14 +50,15 @@
 
                 // Prepare and bind SQL statement
                 $stmt = $conn->prepare("
-                    SELECT SalesId,ProductId,Price,Quantity,Date
+                    SELECT Sales.SalesId, Products.ProductName, Sales.Price, Sales.Quantity, Sales.Date
                     FROM Sales
+                    INNER JOIN Products ON Sales.ProductId=Products.ProductId
                     WHERE
-                        ProductId IN (SELECT ProductId FROM Products WHERE ProductName=?)
-                        AND Price=?
-                        AND Quantity=?
-                        AND Date=?
-                    ORDER BY Date,SalesId");
+                        Products.ProductName=?
+                        AND Sales.Price=?
+                        AND Sales.Quantity=?
+                        AND Sales.Date=?
+                    ORDER BY Sales.Date, Sales.SalesId");
                 $stmt->bind("sids",$product,$quantity,$price,$date)
 
                 // Execute statement and bind results
