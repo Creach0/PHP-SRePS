@@ -8,7 +8,7 @@ CREATE TABLE Products(
 	ProductName VARCHAR(50) NOT NULL,
 	CategoryId INT,
 	Quantity INT NOT NULL,
-	FOREIGN KEY CategoryId REFERENCES Category(CategoryId)
+	FOREIGN KEY (CategoryId) REFERENCES Category(CategoryId)
 );
 
 CREATE TABLE Sales(
@@ -17,5 +17,5 @@ CREATE TABLE Sales(
 	Price DECIMAL(6,2) NOT NULL,
 	Quantity INT NOT NULL,
 	Date DATE NOT NULL
-	FOREIGN KEY ProductId REFERENCES Product(ProductId)
+	FOREIGN KEY (ProductId) REFERENCES Product(ProductId)
 );
