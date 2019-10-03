@@ -44,7 +44,7 @@
                     {
                         echo "<tr>"
                             ."<td>".$row["CategoryName"]."</td>"
-                            ."<td>".$row["Total"]."</td>"
+                            ."<td>$".$row["Total"]."</td>"
                             ."</tr>";
                     }
             ?>
@@ -64,7 +64,7 @@
                     {
                         echo "<tr>"
                             ."<td>".$row["Date"]."</td>"
-                            ."<td>".$row["Total"]."</td>"
+                            ."<td>$".$row["Total"]."</td>"
                             ."</tr>";
                     }
             ?>
