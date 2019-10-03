@@ -1,6 +1,6 @@
 /**
 * Author: Rory Free
-* Target: AddItem.html
+* Target: AddRecord.php
 * Purpose: Takes input from page and validates it using regex
 * Created: 24/09/2019
 * Last updated: 30/09/2019
