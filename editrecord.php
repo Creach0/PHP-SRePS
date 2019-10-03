@@ -16,18 +16,19 @@
                 echo_nav();
 
                 // Get sale id
-                $saleid = (
-                    isset($_POST["saleid"]) &&
-                    ($_POST["saleid"] != null) &&
-                    is_string($_POST["saleid"])
-                ) ? ("%".htmlspecialchars($_POST["saleid"])."%") : "%";
+                if (!isset($_POST["saleid"]) ||
+                    ($_POST["saleid"] == null) ||
+                    !is_numeric($_POST["saleid"])) {
+                        throw new Exception("Invalid Sale ID");
+                }
+                $saleid = htmlspecialchars($_POST["saleid"]);
 
                 // Define varaibles
                 $product = "";
                 $quantity = "";
                 $price = "";
                 $date = "";
-                $savedata = isset($_POST["save"]);
+                $savedata = isset($_POST["save"]) && ($_POST["save"] != null);
                 $stmt = null;
 
                 // Check if saving new data
@@ -35,7 +36,7 @@
 
                     // Check values exist
                     if (!isset($_POST["product"])  || ($_POST["product"] == null)  || !is_string($_POST["product"]) ||
-                        !isset($_POST["quantity"]) || ($_POST["quantity"] == null) || !is_integer($_POST["quantity"]) ||
+                        !isset($_POST["quantity"]) || ($_POST["quantity"] == null) || !is_numeric($_POST["quantity"]) ||
                         !isset($_POST["price"])    || ($_POST["price"] == null)    || !is_numeric($_POST["price"]) ||
                         !isset($_POST["date"])     || ($_POST["date"] == null)     || !is_string($_POST["date"])) {
 
@@ -75,14 +76,19 @@
                             Quantity = ?,
                             Date = ?
                         WHERE SalesId = ?");
-                    $stmt->bind_param("sidsi", $product, $quantity, $price, $date, $saleid);
+                    $stmt->bind_param("sssss", $product, $quantity, $price, $date, $saleid);
 
                     // Execute statement and check for errors
                     $stmt->execute();
-                    $affected_rows = $stmt->affected_rows();
-                    if ($affected_rows < 1) {
-                        echo "<p>Failed to update:<br/>".$stmt->error()."</p>";
+                    $affected_rows = $stmt->affected_rows;
+                    if ($affected_rows > 0) {
+                        echo "<p>Sale record updated.</p>";
+                    } else {
+                        echo "<p>Failed to update:<br/>".$stmt->error."</p>";
                     }
+
+                    // Close statement
+                    $stmt->close();
                 }
 
                 // Prepare and bind SQL statement
@@ -92,7 +98,7 @@
                     INNER JOIN Products ON Sales.ProductId=Products.ProductId
                     WHERE Sales.SalesId=?
                     LIMIT 1");
-                $stmt->bind_param("i",$saleid);
+                $stmt->bind_param("s",$saleid);
 
                 // Execute statement and bind results
                 $stmt->execute();
@@ -116,6 +122,8 @@
                             <label for=\"date\">Date:</label>
                             <input type=\"date\" name=\"date\" id=\"date\" value=\"$date\" /><br />
 
+                            <input type=\"hidden\" id=\"saleid\" name=\"saleid\" value=\"$saleid\" /><br />
+
                             <p>
                                 <input type=\"submit\" name=\"save\" value=\"Save\" />
                             </p>
@@ -123,7 +131,7 @@
                         </form>
                     </section>";
                 } else {
-                    echo "<p>Invalid sale ID.</p>";
+                    echo "<p>Invalid sale ID ($saleid).</p>";
                 }
 
                 // Close everything

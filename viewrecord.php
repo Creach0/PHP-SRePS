@@ -43,14 +43,6 @@
                     is_string($_POST["date"])
                 ) ? ("%".htmlspecialchars($_POST["date"])."%") : "%";
 
-                echo "
-                    <p>Search parameters:<br/>
-                    Product: $product<br/>
-                    Quantity: $quantity<br/>
-                    Price: $price<br/>
-                    Date: $date<br/>
-                    </p>";
-
                 // Connect to database
                 require_once ("settings.php");
                 $conn = new mysqli($host,$user,$pwd,$dbnm);
@@ -75,7 +67,7 @@
 
                 // Bind and fetch the results
                 echo "
-                <p>Results:<br/>
+                <p>
                 <table>
                     <tr>
                         <th>Product</th>
@@ -93,7 +85,7 @@
                         <td>$date</td>
                         <td>
                             <form id=\"editrecord\" method=\"post\" action=\"editrecord.php\">
-                            <input type=\"hidden\" id=\"saleid\" value=\"$saleid\" /><br />
+                            <input type=\"hidden\" id=\"saleid\" name=\"saleid\" value=\"$saleid\" /><br />
                             <input type=\"submit\" value=\"Edit\" />
                             </form>
                         </td>
