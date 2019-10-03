@@ -16,16 +16,16 @@
 			<form id="addrecord" method="post" action="addrecord.php">
 
 				<label for="product">Product:
-				<input type="text" name="product" id="product" /></label><br />
-
-				<label for="quantity">Quantity:
-				<input type="number" name="quantity" id="quantity" /></label><br />
+				<input type="text" name="product" id="product" /></label><br/>
 
 				<label for="price">Price:
-				<input type="number" name="price" id="price" /></label><br />
+				<input type="number" name="price" id="price" /></label><br/>
+
+				<label for="quantity">Quantity:
+				<input type="number" name="quantity" id="quantity" /></label><br/>
 
 				<label for="date">Date:
-				<input type="date" name="date" id="date" /></label><br />
+				<input type="date" name="date" id="date" /></label><br/>
 
 				<p>
 					<input type="submit" value="Add" />
@@ -33,7 +33,9 @@
 				</p>
 
 			</form>
- <?php print_r( $_POST );   ?>
+
+
+
 			<?php
 				try {
 						// Connect to database
@@ -43,31 +45,22 @@
 
 						echo "<p>Connected to database.</p>";
 
-						$sql = "SELECT * FROM Sales;";
+						$product = $_POST['product'];
+						$quantity = $_POST['quantity'];
+						$price = $_POST['price'];
+						$userdate = strtotime($_POST['date']);
+  					$date = date('Y-m-d', $userdate);
+
+						//$sql = "INSERT INTO 'Sales' (ProductId, Price, Quantity, Date) VALUES((SELECT ProductId FROM Product WHERE ProductName = '$product'),'$quantity','$price','$date')";
+						$sql = "INSERT INTO Sales (ProductId, Price, Quantity, Date) VALUES(1, 3, 5, "2019-10-3")";
 						$result = mysqli_query($conn, $sql);
-						$resultCheck = mysqli_num_rows($result);
-						if($resultCheck > 0)
-						{
-							echo "<table border = \"1\">";
-							echo "<tr><th>SalesId</th><th>ProductId</th><th>Price</th><th>Quantity</th><th>Date</th></tr>";
-							while($row = mysqli_fetch_assoc($result))
-							{
-							echo "<tr><td>";
-							echo $row['SalesId'];
-							echo "</td><td>";
-							echo $row['ProductId'];
-							echo "</td><td>";
-							echo $row['Price'];
-							echo "</td><td>";
-							echo $row['Quantity'];
-							echo "</td><td>";
-							echo $row['Date'];
-							echo "</td></tr>";
-							}
-							echo "</table>";
-							}
+
+						//$sql = "SELECT * FROM Sales;";
+						//$result = mysqli_query($conn, $sql);
+						//$resultCheck = mysqli_num_rows($result);
+
 									// Close everything
-									$conn->close();
+							$conn->close();
 
 							} catch(Exception $e) {
 									echo "Oops! Something went wrong: ".$e->getMessage();
