@@ -28,6 +28,30 @@
 
 	<body>
 		<h1>Generated Report</h1>
+        <h2>Displaying report from <?php echo $start_date; ?> to <?php echo $end_date; ?></h2>
+
+        <h3>Sales by category</h3>
+        <table>
+            <tr> <th>Category</th> <th>Sales Price</th> </tr>
+            <?php
+                $query  = "SELECT Category.CategoryName, (Sales.Price * Sales.Quantity) AS Total FROM Category NATURAL JOIN Products NATURAL JOIN Sales 
+                    WHERE Sales.Date > '$start_date' AND Sales.Date < '$end_date' GROUP BY Category.CategoryName";
+
+                $result = @mysqli_query($query);
+
+                while ($row = $result->fetch_assoc())
+                {
+                    echo "<tr>"
+                        ."<td>".$row["CategoryName"]."</td>"
+                        ."<td>".$row["Total"]."</td>"
+                        ."</tr>";
+                }
+            ?>
+        </table>
+
+        <h3>Sales by date</h3>
+
+        <h3>Remaining product stocks</h3>
 
 	</body>
 </html>
