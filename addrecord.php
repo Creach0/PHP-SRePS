@@ -11,7 +11,7 @@
 		</header>
 	<?php echo_nav() ?>
 
-
+		<h2> Add a record </h2>
 		<section class="centered">
 			<form id="addrecord" method="post" action="addrecord.php">
 
@@ -28,24 +28,14 @@
 				<input type="date" name="date" id="date" /></label><br />
 
 				<p>
-					<input type="submit" value="Search" />
+					<input type="submit" value="Add" />
 					<input type="reset" value="Clear" />
 				</p>
 
 			</form>
-
+ <?php print_r( $_POST );   ?>
 			<?php
 				try {
-
-						// Get product name
-						$product = (
-								isset($_POST["product"]) &&
-								($_POST["product"] != null) &&
-								is_string($_POST["product"])
-						) ? ("%".htmlspecialchars($_POST["product"])."%") : "%";
-
-						echo "$product = $product";
-
 						// Connect to database
 						require_once ("settings.php");
 						$conn = new mysqli($host,$user,$pwd,$dbnm);
@@ -53,34 +43,40 @@
 
 						echo "<p>Connected to database.</p>";
 
+						$sql = "SELECT * FROM Sales;";
+						$result = mysqli_query($conn, $sql);
+						$resultCheck = mysqli_num_rows($result);
+						if($resultCheck > 0)
+						{
+							echo "<table border = \"1\">";
+							echo "<tr><th>SalesId</th><th>ProductId</th><th>Price</th><th>Quantity</th><th>Date</th></tr>";
+							while($row = mysqli_fetch_assoc($result))
+							{
+							echo "<tr><td>";
+							echo $row['SalesId'];
+							echo "</td><td>";
+							echo $row['ProductId'];
+							echo "</td><td>";
+							echo $row['Price'];
+							echo "</td><td>";
+							echo $row['Quantity'];
+							echo "</td><td>";
+							echo $row['Date'];
+							echo "</td></tr>";
+							}
+							echo "</table>";
+							}
+									// Close everything
+									$conn->close();
 
-						// Close everything
-						$conn->close();
-
-				} catch(Exception $e) {
-						echo "Oops! Something went wrong: ".$e->getMessage();
-				}
-				?>
+							} catch(Exception $e) {
+									echo "Oops! Something went wrong: ".$e->getMessage();
+							}
+							?>
 
 
-				<?php
-				//Retrieve db
-					$sql = "SELECT * FROM Sales;";
-		$result = mysqli_query($conn, $sql);
-		$resultCheck = mysqli_num_rows($result);
-		if($resultCheck > 0)
-		{
-			echo "<table border = \"1\">";
-			echo "<tr><th>SalesId</th><th>ProductId</th><th>Price</th><th>Quantity</th><th>Date</th></tr>";
-			while($row = mysqli_fetch_assoc($result)) {
-			echo "<tr><td>";
-			echo $row['SalesId'];
-			echo "</td><td>";
-			echo $row['o'];
-			echo "</td></tr>"; }
-			echo "</table>"; }
-				 ?>
 
+<p> Reached </p>
 
 
 		</section>
