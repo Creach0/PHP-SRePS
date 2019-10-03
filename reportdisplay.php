@@ -37,7 +37,7 @@
                 $query  = "SELECT Category.CategoryName, (Sales.Price * Sales.Quantity) AS Total FROM Category NATURAL JOIN Products NATURAL JOIN Sales 
                     WHERE Sales.Date > '$start_date' AND Sales.Date < '$end_date' GROUP BY Category.CategoryName";
 
-                $result = @mysqli_query($query);
+                $result = @mysqli_query($conn, $query);
 
                 while ($row = $result->fetch_assoc())
                 {
