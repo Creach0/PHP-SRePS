@@ -54,12 +54,12 @@
                     FROM Sales
                     INNER JOIN Products ON Sales.ProductId=Products.ProductId
                     WHERE
-                        Products.ProductName=?
-                        AND Sales.Price=?
-                        AND Sales.Quantity=?
-                        AND Sales.Date=?
+                        Products.ProductName LIKE ?
+                        AND Sales.Price LIKE ?
+                        AND Sales.Quantity LIKE ?
+                        AND Sales.Date LIKE ?
                     ORDER BY Sales.Date, Sales.SalesId");
-                $stmt->bind_param("sids",$product,$quantity,$price,$date);
+                $stmt->bind_param("ssss",$product,$quantity,$price,$date);
 
                 echo "
                     <p>Search parameters:<br/>
