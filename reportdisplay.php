@@ -1,7 +1,7 @@
 <?php
   include_once("settings.php");
 
-  $conn = @mysqli_connect($host, $user, $pwd, $database) or die ('Failed to connect to the database');
+  $conn = @mysqli_connect($host, $user, $pwd, $dbnm) or die ('Failed to connect to the database');
 
   $date_in_seconds = strtotime($_POST['end_date']);
   $end_date = date('Y-m-d', $date_in_seconds);
@@ -34,10 +34,10 @@
         <table>
             <tr> <th>Category</th> <th>Total Sales</th> </tr>
             <?php
-                $query  = "SELECT Category.CategoryName, (Sales.Price * Sales.Quantity), Sales.Date AS Total FROM Category NATURAL JOIN Products NATURAL JOIN Sales 
-                    WHERE Sales.Date > '$start_date' AND Sales.Date < '$end_date' GROUP BY Category.CategoryName";
+                $query  = "SELECT CategoryName, (Price * Quantity) AS Total, Date FROM Category NATURAL JOIN Products NATURAL JOIN Sales 
+                    WHERE Date > '$start_date' AND Date < '$end_date' GROUP BY CategoryName";
 
-                $result = mysqli_query($conn, $query);
+                $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
 
                 if (@mysqli_num_rows($result) > 0)
                     while ($row = $result->fetch_assoc())
@@ -74,7 +74,7 @@
         <table>
             <tr> <th>Product Name</th> <th>Amount Left</th> <th>Amount Sold</th> </tr>
             <?php
-                $query = "SELECT Date, (Price * Quantity) AS TotalSold, Stock, ProductName FROM Products NATURAL JOIN Sales 
+                $query = "SELECT Date, Quantity AS TotalSold, Stock, ProductName FROM Products NATURAL JOIN Sales 
                             WHERE Date > '$start_date' AND Date < '$end_date' GROUP BY ProductName";
 
                 $result = mysqli_query($conn, $query);
