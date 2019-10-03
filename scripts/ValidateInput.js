@@ -10,21 +10,15 @@ function validateInput()
 {
     var errMsg = "";
 
-    var productId = document.getElementById("productId").value;
+    var productId = document.getElementById("product").value;
     var quantity = document.getElementById("quantity").value;
     var price = document.getElementById("price").value;
-    var date = document.getElementById("dateBox").value;
+    var date = document.getElementById("date").value;
 
     if (productId == "") {
-        errMsg += "Please enter a product ID.\n";
-    }
-    else if (isNaN(productId)) {
-        errMsg += "Please make sure your product ID is a non-negative integer.\n";
+        errMsg += "Please enter a product name.\n";
     }
     //parseInt may be unnecesary here, need to do more research on what value() returns based on context
-    else if (parseInt(productId) < 0) {
-        errMsg += "Please make sure your quantity is non-negative.\n";
-    }
     if (quantity == "") {
         errMsg += "Please enter a quantity.\n";
     }

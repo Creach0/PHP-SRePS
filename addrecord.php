@@ -34,7 +34,6 @@
 
 			</form>
 
-
 			<?php
 				try {
 
