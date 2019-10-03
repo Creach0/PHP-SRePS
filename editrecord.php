@@ -75,7 +75,7 @@
                             Quantity = ?,
                             Date = ?
                         WHERE SalesId = ?");
-                    $stmt->bind("sidsi", $product, $quantity, $price, $date, $saleid);
+                    $stmt->bind_param("sidsi", $product, $quantity, $price, $date, $saleid);
 
                     // Execute statement and check for errors
                     $stmt->execute();
@@ -92,7 +92,7 @@
                     INNER JOIN Products ON Sales.ProductId=Products.ProductId
                     WHERE Sales.SalesId=?
                     LIMIT 1");
-                $stmt->bind("i",$saleid)
+                $stmt->bind_param("i",$saleid);
 
                 // Execute statement and bind results
                 $stmt->execute();
@@ -105,16 +105,16 @@
                         <form id=\"editrecord\" method=\"post\" action=\"editrecord.php\">
 
                             <label for=\"product\">Product:</label>
-                            <input type=\"text\" name=\"product\" id=\"product\" value=\"".$product."\" /><br />
+                            <input type=\"text\" name=\"product\" id=\"product\" value=\"$product\" /><br />
 
                             <label for=\"quantity\">Quantity:</label>
-                            <input type=\"number\" name=\"quantity\" id=\"quantity\" value=\"".$quantity."\" /><br />
+                            <input type=\"number\" name=\"quantity\" id=\"quantity\" value=\"$quantity\" /><br />
 
                             <label for=\"price\">Price:</label>
-                            <input type=\"number\" name=\"price\" id=\"price\" value=\"".$price."\" /><br />
+                            <input type=\"number\" name=\"price\" id=\"price\" value=\"$price\" /><br />
 
                             <label for=\"date\">Date:</label>
-                            <input type=\"date\" name=\"date\" id=\"date\" value=\"".$date."\" /><br />
+                            <input type=\"date\" name=\"date\" id=\"date\" value=\"$date\" /><br />
 
                             <p>
                                 <input type=\"submit\" name=\"save\" value=\"Save\" />

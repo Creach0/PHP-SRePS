@@ -59,7 +59,17 @@
                         AND Sales.Quantity=?
                         AND Sales.Date=?
                     ORDER BY Sales.Date, Sales.SalesId");
-                $stmt->bind("sids",$product,$quantity,$price,$date)
+                $stmt->bind_param("sids",$product,$quantity,$price,$date);
+
+                echo "
+                    <p>Search parameters:<br/>
+                    Product: $product<br/>
+                    Quantity: $quantity<br/>
+                    Price: $price<br/>
+                    Date: $date<br/>
+                    </p>";
+                $stmt->bind_param("sids",$product,$quantity,$price,$date);
+
 
                 // Execute statement and bind results
                 $stmt->execute();
@@ -67,6 +77,7 @@
 
                 // Bind and fetch the results
                 echo "
+                <p>Results:<br/>
                 <table>
                     <tr>
                         <th>Product</th>
@@ -77,19 +88,21 @@
                 while ($stmt->fetch()) {
                     echo "
                     <tr>
-                        <td>".$product."</td>
-                        <td>".$quantity."</td>
-                        <td>".$price."</td>
-                        <td>".$date."</td>
+                        <td>$product</td>
+                        <td>$quantity</td>
+                        <td>$price</td>
+                        <td>$date</td>
                         <td>
                             <form id=\"editrecord\" method=\"post\" action=\"editrecord.php\">
-                            <input type=\"hidden\" id=\"saleid\" value=\"".$saleid."\" /><br />
+                            <input type=\"hidden\" id=\"saleid\" value=\"$saleid\" /><br />
                             <input type=\"submit\" value=\"Edit\" />
                             </form>
                         </td>
                     </tr>";
                 };
-                echo "</table>";
+                echo "
+                </table>
+                </p>";
 
                 // Close everything
                 $stmt->close();
