@@ -1,13 +1,13 @@
 CREATE TABLE Category(
 	CategoryId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	CategorName VARCHAR(50) NOT NULL
+	CategoryName VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE Products(
 	ProductId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	ProductName VARCHAR(50) NOT NULL,
 	CategoryId INT,
-	Quantity INT NOT NULL,
+	Stock INT NOT NULL,
 	FOREIGN KEY (CategoryId) REFERENCES Category(CategoryId)
 );
 
