@@ -39,13 +39,14 @@
 
                 $result = mysqli_query($conn, $query);
 
-                while ($row = $result->fetch_assoc())
-                {
-                    echo "<tr>"
-                        ."<td>".$row["CategoryName"]."</td>"
-                        ."<td>".$row["Total"]."</td>"
-                        ."</tr>";
-                }
+                if (@mysqli_num_rows($result) > 0)
+                    while ($row = $result->fetch_assoc())
+                    {
+                        echo "<tr>"
+                            ."<td>".$row["CategoryName"]."</td>"
+                            ."<td>".$row["Total"]."</td>"
+                            ."</tr>";
+                    }
             ?>
         </table>
 
@@ -58,13 +59,14 @@
 
                 $result = mysqli_query($conn, $query);
 
-                while ($row = $result->fetch_assoc())
-                {
-                    echo "<tr>"
-                        ."<td>".$row["Date"]."</td>"
-                        ."<td>".$row["Total"]."</td>"
-                        ."</tr>";
-                }
+                if (@mysqli_num_rows($result) > 0)
+                    while ($row = $result->fetch_assoc())
+                    {
+                        echo "<tr>"
+                            ."<td>".$row["Date"]."</td>"
+                            ."<td>".$row["Total"]."</td>"
+                            ."</tr>";
+                    }
             ?>
         </table>
 
@@ -77,14 +79,15 @@
 
                 $result = mysqli_query($conn, $query);
 
-                while ($row = $result->fetch_assoc())
-                {
-                    echo "<tr>"
-                        ."<td>".$row["ProductName"]."</td>"
-                        ."<td>".$row["Stock"]."</td>"
-                        ."<td>".$row["TotalSold"]."</td>"
-                        ."</tr>";
-                }
+                if (@mysqli_num_rows($result) > 0)
+                    while ($row = $result->fetch_assoc())
+                    {
+                        echo "<tr>"
+                            ."<td>".$row["ProductName"]."</td>"
+                            ."<td>".$row["Stock"]."</td>"
+                            ."<td>".$row["TotalSold"]."</td>"
+                            ."</tr>";
+                    }
             ?>
         </table>
 
