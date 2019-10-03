@@ -11,7 +11,7 @@
   {
     case "week":
       // gets the date a week before
-      $start_date = date('Y-m-d', $date_in_seconds - 604800);
+      $start_date = date('Y-m-d', $date_in_seconds - 432000);
       break;
     case "month":
       // gets the date a month before
@@ -35,7 +35,7 @@
             <tr> <th>Category</th> <th>Total Sales</th> </tr>
             <?php
                 $query  = "SELECT CategoryName, (Price * Quantity) AS Total, Date FROM Category NATURAL JOIN Products NATURAL JOIN Sales 
-                    WHERE Date > '$start_date' AND Date < '$end_date' GROUP BY CategoryName";
+                    WHERE Date >= '$start_date' AND Date <= '$end_date' GROUP BY CategoryName";
 
                 $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
 
@@ -55,7 +55,7 @@
             <tr> <th>Date</th> <th>Total Sales</th> </tr>
             <?php
                 $query = "SELECT Date, (Price * Quantity) AS Total FROM Category NATURAL JOIN Products NATURAL JOIN Sales 
-                        WHERE Date > '$start_date' AND Date < '$end_date' GROUP BY Date";
+                        WHERE Date >= '$start_date' AND Date <= '$end_date' GROUP BY Date";
 
                 $result = mysqli_query($conn, $query);
 
@@ -75,7 +75,7 @@
             <tr> <th>Product Name</th> <th>Amount Left</th> <th>Amount Sold</th> </tr>
             <?php
                 $query = "SELECT Date, Quantity AS TotalSold, Stock, ProductName FROM Products NATURAL JOIN Sales 
-                            WHERE Date > '$start_date' AND Date < '$end_date' GROUP BY ProductName";
+                            WHERE Date >= '$start_date' AND Date <= '$end_date' GROUP BY ProductName";
 
                 $result = mysqli_query($conn, $query);
 
