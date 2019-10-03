@@ -1,12 +1,19 @@
 <?php
   include_once("settings.php");
 
+  // connects to the database
   $conn = @mysqli_connect($host, $user, $pwd, $dbnm) or die ('Failed to connect to the database');
 
+  // gets the unix timestamp to allow the start date to be calculated
   $date_in_seconds = strtotime($_POST['end_date']);
+
+  // gets the end date in the correct format
   $end_date = date('Y-m-d', $date_in_seconds);
+
+  // gets whether the length is weekly or monthly from the form
   $length = $_POST['length'];
 
+  // calculates the end date based on whether the user chose to generate a weekly or monthly report
   switch($length)
   {
     case "week":
@@ -34,6 +41,7 @@
         <table>
             <tr> <th>Category</th> <th>Total Sales</th> </tr>
             <?php
+                // query to get the total sales for each category
                 $query  = "SELECT CategoryName, (Price * Quantity) AS Total, Date FROM Category NATURAL JOIN Products NATURAL JOIN Sales 
                     WHERE Date >= '$start_date' AND Date <= '$end_date' GROUP BY CategoryName";
 
@@ -54,6 +62,7 @@
         <table>
             <tr> <th>Date</th> <th>Total Sales</th> </tr>
             <?php
+                // query to get the total sales for each date
                 $query = "SELECT Date, (Price * Quantity) AS Total FROM Category NATURAL JOIN Products NATURAL JOIN Sales 
                         WHERE Date >= '$start_date' AND Date <= '$end_date' GROUP BY Date";
 
@@ -74,6 +83,7 @@
         <table>
             <tr> <th>Product Name</th> <th>Amount Left</th> <th>Amount Sold</th> </tr>
             <?php
+                // query to get the stock and amount sold for each product
                 $query = "SELECT Date, Quantity AS TotalSold, Stock, ProductName FROM Products NATURAL JOIN Sales 
                             WHERE Date >= '$start_date' AND Date <= '$end_date' GROUP BY ProductName";
 
