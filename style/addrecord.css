@@ -10,13 +10,6 @@ h2 {
 	text-align: center;
 }
 
-nav a {
-	color: inherit;
-	display: block;
-	background-color: darkslategray;
-	color: white;
-}
-
 nav {
 	float: left;
 	width: 100%;
@@ -35,13 +28,17 @@ nav ul li {
 	width: 13%;
 	text-align: center;
 	font-size: 1.5em;
-	padding: 5px;
 	min-width: 5.5em;
+	border-left: 1px solid black;
 }
 
 nav a {
 	padding: 0.2em 0.6em;
 	text-decoration: none;
+	color: inherit;
+	display: block;
+	background-color: darkslategray;
+	color: white;
 }
 
 nav a:hover, nav a:focus {
