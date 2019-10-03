@@ -19,7 +19,7 @@
 				<input type="text" name="product" id="product" /></label><br/>
 
 				<label for="price">Price:
-				<input type="number" name="price" id="price" /></label><br/>
+				<input type="number" step=".01" name="price" id="price" /></label><br/>
 
 				<label for="quantity">Quantity:
 				<input type="number" name="quantity" id="quantity" /></label><br/>
