@@ -49,6 +49,7 @@
                 if ($conn->connect_error) throw new Exception("Failed to connect to database: ".$conn->connect_error);
 
                 // Prepare and bind SQL statement
+                /*
                 $stmt = $conn->prepare("
                     SELECT Sales.SalesId, Products.ProductName, Sales.Price, Sales.Quantity, Sales.Date
                     FROM Sales
@@ -60,6 +61,24 @@
                         AND Sales.Date LIKE ?
                     ORDER BY Sales.Date, Sales.SalesId");
                 $stmt->bind_param("ssss",$product,$quantity,$price,$date);
+                */
+                $stmt = $conn->prepare("
+                    SELECT SalesId,ProductId,Price,Quantity,Date
+                    FROM Sales
+                    WHERE
+                        (ProductId LIKE ?)
+                        AND (Quantity LIKE ?)
+                        AND (Date LIKE ?)");
+                $stmt->bind_param("sss",$price,$price,$price);
+            /*
+                    WHERE
+                        ProductId LIKE ?
+                        AND Price LIKE ?
+                        AND Quantity LIKE ?
+                        AND Date LIKE ?");
+                $stmt->bind_param("ssss",$product,$quantity,$price,$date);
+                */
+
 
                 echo "
                     <p>Search parameters:<br/>
