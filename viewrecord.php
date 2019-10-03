@@ -43,43 +43,6 @@
                     is_string($_POST["date"])
                 ) ? ("%".htmlspecialchars($_POST["date"])."%") : "%";
 
-                // Connect to database
-                require_once ("settings.php");
-                $conn = new mysqli($host,$user,$pwd,$dbnm);
-                if ($conn->connect_error) throw new Exception("Failed to connect to database: ".$conn->connect_error);
-
-                // Prepare and bind SQL statement
-                /*
-                $stmt = $conn->prepare("
-                    SELECT Sales.SalesId, Products.ProductName, Sales.Price, Sales.Quantity, Sales.Date
-                    FROM Sales
-                    INNER JOIN Products ON Sales.ProductId=Products.ProductId
-                    WHERE
-                        Products.ProductName LIKE ?
-                        AND Sales.Price LIKE ?
-                        AND Sales.Quantity LIKE ?
-                        AND Sales.Date LIKE ?
-                    ORDER BY Sales.Date, Sales.SalesId");
-                $stmt->bind_param("ssss",$product,$quantity,$price,$date);
-                */
-                $stmt = $conn->prepare("
-                    SELECT SalesId,ProductId,Price,Quantity,Date
-                    FROM Sales
-                    WHERE
-                        (ProductId LIKE ?)
-                        AND (Quantity LIKE ?)
-                        AND (Date LIKE ?)");
-                $stmt->bind_param("sss",$price,$price,$price);
-            /*
-                    WHERE
-                        ProductId LIKE ?
-                        AND Price LIKE ?
-                        AND Quantity LIKE ?
-                        AND Date LIKE ?");
-                $stmt->bind_param("ssss",$product,$quantity,$price,$date);
-                */
-
-
                 echo "
                     <p>Search parameters:<br/>
                     Product: $product<br/>
@@ -87,8 +50,24 @@
                     Price: $price<br/>
                     Date: $date<br/>
                     </p>";
-                $stmt->bind_param("sids",$product,$quantity,$price,$date);
 
+                // Connect to database
+                require_once ("settings.php");
+                $conn = new mysqli($host,$user,$pwd,$dbnm);
+                if ($conn->connect_error) throw new Exception("Failed to connect to database: ".$conn->connect_error);
+
+                // Prepare and bind SQL statement
+                $stmt = $conn->prepare("
+                    SELECT Sales.SalesId, Products.ProductName, Sales.Price, Sales.Quantity, Sales.Date
+                    FROM Sales
+                    INNER JOIN Products ON Sales.ProductId=Products.ProductId
+                    WHERE
+                        (Products.ProductName LIKE ?)
+                        AND (Sales.Price LIKE ?)
+                        AND (Sales.Quantity LIKE ?)
+                        AND (Sales.Date LIKE ?)
+                    ORDER BY Sales.Date, Sales.SalesId");
+                $stmt->bind_param("ssss",$product,$quantity,$price,$date);
 
                 // Execute statement and bind results
                 $stmt->execute();
@@ -103,6 +82,7 @@
                         <th>Price</th>
                         <th>Quantity</th>
                         <th>Date</th>
+                        <th></th>
                     </tr>";
                 while ($stmt->fetch()) {
                     echo "
