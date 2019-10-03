@@ -42,7 +42,7 @@
             <tr> <th>Category</th> <th>Total Sales</th> </tr>
             <?php
                 // query to get the total sales for each category
-                $query  = "SELECT CategoryName, (Price * Quantity) AS Total, Date FROM Category NATURAL JOIN Products NATURAL JOIN Sales 
+                $query  = "SELECT CategoryName, SUM(Price * Quantity) AS Total, Date FROM Category NATURAL JOIN Products NATURAL JOIN Sales 
                     WHERE Date >= '$start_date' AND Date <= '$end_date' GROUP BY CategoryName";
 
                 $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
@@ -63,7 +63,7 @@
             <tr> <th>Date</th> <th>Total Sales</th> </tr>
             <?php
                 // query to get the total sales for each date
-                $query = "SELECT Date, (Price * Quantity) AS Total FROM Category NATURAL JOIN Products NATURAL JOIN Sales 
+                $query = "SELECT Date, SUM(Price * Quantity) AS Total FROM Category NATURAL JOIN Products NATURAL JOIN Sales 
                         WHERE Date >= '$start_date' AND Date <= '$end_date' GROUP BY Date";
 
                 $result = mysqli_query($conn, $query);
@@ -84,7 +84,7 @@
             <tr> <th>Product Name</th> <th>Amount Left</th> <th>Amount Sold</th> </tr>
             <?php
                 // query to get the stock and amount sold for each product
-                $query = "SELECT Date, Quantity AS TotalSold, Stock, ProductName FROM Products NATURAL JOIN Sales 
+                $query = "SELECT Date, SUM(Quantity) AS TotalSold, Stock, ProductName FROM Products NATURAL JOIN Sales 
                             WHERE Date >= '$start_date' AND Date <= '$end_date' GROUP BY ProductName";
 
                 $result = mysqli_query($conn, $query);
