@@ -29,10 +29,11 @@
                 $price = "";
                 $date = "";
                 $savedata = isset($_POST["save"]) && ($_POST["save"] != null);
+                $deleterecord = isset($_POST["deleterecord"]) && ($_POST["deleterecord"] == "yes");
                 $stmt = null;
 
                 // Check if saving new data
-                if ($savedata) {
+                if ($savedata && !$deleterecord) {
 
                     // Check values exist
                     if (!isset($_POST["product"])  || ($_POST["product"] == null)  || !is_string($_POST["product"]) ||
@@ -60,82 +61,119 @@
                 $conn = new mysqli($host,$user,$pwd,$dbnm);
                 if ($conn->connect_error) throw new Exception("Failed to connect to database: ".$conn->connect_error);
 
-                // Check if saving new data
-                if ($savedata) {
+                // Check if deleting record
+                if ($deleterecord) {
 
                     // Prepare and bind SQL statement
                     $stmt = $conn->prepare("
-                        UPDATE Sales
-                        SET
-                            ProductId = (
-                                SELECT ProductId
-                                FROM Products
-                                WHERE ProductName = ?
-                            ),
-                            Price = ?,
-                            Quantity = ?,
-                            Date = ?
+                        DELETE FROM Sales
                         WHERE SalesId = ?");
-                    $stmt->bind_param("sssss", $product, $quantity, $price, $date, $saleid);
+                    $stmt->bind_param("s", $saleid);
 
                     // Execute statement and check for errors
-                    $stmt->execute();
-                    $affected_rows = $stmt->affected_rows;
-                    if ($affected_rows > 0) {
-                        echo "<p>Sale record updated.</p>";
+                    $res = $stmt->execute();
+                    if ($res == false) {
+                        echo "<p>Failed to delete sales record.</p>";
                     } else {
-                        echo "<p>Failed to update:<br/>".$stmt->error."</p>";
+                        $affected_rows = $stmt->affected_rows;
+                        if ($affected_rows > 0) {
+                            echo "<p>Sale record $saleid was deleted.</p>";
+                        } else {
+                            echo "<p>No changes made.</p>";
+                        }
+                    }
+
+                    // Close statement
+                    $stmt->close();
+                } else {
+
+                    // Check if saving new data
+                    if ($savedata) {
+
+                        // Prepare and bind SQL statement
+                        $stmt = $conn->prepare("
+                            UPDATE Sales
+                            SET
+                                ProductId = (
+                                    SELECT ProductId
+                                    FROM Products
+                                    WHERE ProductName = ?
+                                ),
+                                Quantity = ?,
+                                Price = ?,
+                                Date = ?
+                            WHERE SalesId = ?");
+                        $stmt->bind_param("sssss", $product, $quantity, $price, $date, $saleid);
+
+                        // Execute statement and check for errors
+                        $res = $stmt->execute();
+                        if ($res == false) {
+                            echo "<p>Failed to update sales record.</p>";
+                        } else {
+                            $affected_rows = $stmt->affected_rows;
+                            if ($affected_rows > 0) {
+                                echo "<p>Sale record $saleid was updated.</p>";
+                            } else {
+                                echo "<p>No changes made.</p>";
+                            }
+                        }
+
+                        // Close statement
+                        $stmt->close();
+                    }
+
+                    // Prepare and bind SQL statement
+                    $stmt = $conn->prepare("
+                        SELECT Products.ProductName, Sales.Quantity, Sales.Price, Sales.Date
+                        FROM Sales
+                        INNER JOIN Products ON Sales.ProductId=Products.ProductId
+                        WHERE Sales.SalesId=?
+                        LIMIT 1");
+                    $stmt->bind_param("s",$saleid);
+
+                    // Execute statement and bind results
+                    $stmt->execute();
+                    $stmt->bind_result($product,$quantity,$price,$date);
+
+                    // Bind and fetch the results
+                    if ($stmt->fetch()) {
+                        echo "
+                        <section class=\"centered\">
+                            <form id=\"editrecord\" method=\"post\" action=\"editrecord.php\">
+
+                                <label for=\"saleid\">Sale ID:
+                                <input type=\"text\" name=\"saleid\" id=\"saleid\" value=\"$saleid\" readonly /></label><br />
+
+                                <label for=\"product\">Product:
+                                <input type=\"text\" name=\"product\" id=\"product\" value=\"$product\" /></label><br />
+
+                                <label for=\"quantity\">Quantity:
+                                <input type=\"text\" name=\"quantity\" id=\"quantity\" value=\"$quantity\" /></label><br />
+
+                                <label for=\"price\">Price:
+                                <input type=\"text\" name=\"price\" id=\"price\" value=\"$price\" /></label><br />
+
+                                <label for=\"date\">Date:
+                                <input type=\"date\" name=\"date\" id=\"date\" value=\"$date\" /></label><br />
+
+                                <label for=\"deleterecord\">Delete sales record:
+                                <input type=\"checkbox\" name=\"deleterecord\" id=\"deleterecord\" value=\"yes\" /></label><br />
+
+                                <p>
+                                    <input type=\"submit\" name=\"save\" value=\"Save\" />
+                                </p>
+
+                            </form>
+                        </section>";
+                    } else {
+                        echo "<p>Invalid sale ID ($saleid).</p>";
                     }
 
                     // Close statement
                     $stmt->close();
                 }
 
-                // Prepare and bind SQL statement
-                $stmt = $conn->prepare("
-                    SELECT Products.ProductName, Sales.Price, Sales.Quantity, Sales.Date
-                    FROM Sales
-                    INNER JOIN Products ON Sales.ProductId=Products.ProductId
-                    WHERE Sales.SalesId=?
-                    LIMIT 1");
-                $stmt->bind_param("s",$saleid);
-
-                // Execute statement and bind results
-                $stmt->execute();
-                $stmt->bind_result($product,$quantity,$price,$date);
-
-                // Bind and fetch the results
-                if ($stmt->fetch()) {
-                    echo "
-                    <section class=\"centered\">
-                        <form id=\"editrecord\" method=\"post\" action=\"editrecord.php\">
-
-                            <label for=\"product\">Product:</label>
-                            <input type=\"text\" name=\"product\" id=\"product\" value=\"$product\" /><br />
-
-                            <label for=\"quantity\">Quantity:</label>
-                            <input type=\"number\" name=\"quantity\" id=\"quantity\" value=\"$quantity\" /><br />
-
-                            <label for=\"price\">Price:</label>
-                            <input type=\"number\" name=\"price\" id=\"price\" value=\"$price\" /><br />
-
-                            <label for=\"date\">Date:</label>
-                            <input type=\"date\" name=\"date\" id=\"date\" value=\"$date\" /><br />
-
-                            <input type=\"hidden\" id=\"saleid\" name=\"saleid\" value=\"$saleid\" /><br />
-
-                            <p>
-                                <input type=\"submit\" name=\"save\" value=\"Save\" />
-                            </p>
-
-                        </form>
-                    </section>";
-                } else {
-                    echo "<p>Invalid sale ID ($saleid).</p>";
-                }
-
-                // Close everything
-                $stmt->close();
+                // Close connection to database
                 $conn->close();
 
             } catch(Exception $e) {
