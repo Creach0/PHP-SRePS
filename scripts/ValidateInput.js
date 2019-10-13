@@ -1,13 +1,14 @@
 /**
 * Author: Rory Free
-* Target: AddItem.html
+* Target: addrecord.html
 * Purpose: Takes input from page and validates it using regex
 * Created: 24/09/2019
-* Last updated: 30/09/2019
+* Last updated: 14/10/2019
 */
 
 function validateInput()
 {
+    console.log("validateInput begin");
     var errMsg = "";
 
     var productId = document.getElementById("product").value;
@@ -18,11 +19,10 @@ function validateInput()
     if (productId == "") {
         errMsg += "Please enter a product name.\n";
     }
-    //parseInt may be unnecesary here, need to do more research on what value() returns based on context
     if (quantity == "") {
         errMsg += "Please enter a quantity.\n";
     }
-    else if (isNaN(quantity)) {
+    if (isNaN(quantity)) {
         errMsg += "Please make sure your quantity is a non-negative integer.\n";
     }
     else if (parseInt(quantity) < 0) {
@@ -40,11 +40,14 @@ function validateInput()
     }
     
 
-    var inputValid = errMsg != "";
+    var inputValid = errMsg == "";
+    
+    //returns lowercase true or false in inputValid field.
+    document.getElementById("inputValid").value = inputValid.toString();
+
+    console.log("IN validateInput: inputValid found to be " + inputValid.toString() + ", errMsg reads \"" +errMsg+"\"");
 
 	if (!inputValid) {
 		alert(errMsg)
-	}
-
-    return inputValid;
+    }
 }

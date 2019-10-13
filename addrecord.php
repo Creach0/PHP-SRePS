@@ -5,6 +5,11 @@
 <!DOCTYPE html>
 <html lang="en">
 	<?php echo_head(); ?>
+	<!-- Ideally we remove the </head> from echo_head and the <head> from here but two heads works -->
+	<head>
+		<script src="scripts/ValidateInput.js"></script>
+	</head>
+
 	<body>
 		<header>
 			<h1>Sales Records</h1>
@@ -27,50 +32,49 @@
 				<label for="date">Date:
 				<input type="date" name="date" id="date" /></label><br/>
 
+				<input type="hidden" id="inputValid" name="inputValid"/>
 				<p>
-					<input type="submit" value="Add" />
+					<input type="submit" value="Add" onclick="validateInput()" />
 					<input type="reset" value="Clear" />
 				</p>
 
 			</form>
 
 			<?php
-				try {
 
-						// Connect to database
-						require_once ("settings.php");
-						$conn = new mysqli($host,$user,$pwd,$dbnm);
-						if ($conn->connect_error) throw new Exception("Failed to connect to database: ".$conn->connect_error);
+				if ($_POST['inputValid'] = "true") {
+					try {
+							// Connect to database
+							require_once ("settings.php");
+							$conn = new mysqli($host,$user,$pwd,$dbnm);
+							if ($conn->connect_error) throw new Exception("Failed to connect to database: ".$conn->connect_error);
 
-						echo "<p>Connected to database.</p>";
+							$product = $_POST['product'];
+							$quantity = $_POST['quantity'];
+							$price = $_POST['price'];
 
+							$date_in_seconds = strtotime($_POST['date']);
+							$date = date('Y-m-d', $date_in_seconds);
 
-						$product = $_POST['product'];
-						$quantity = $_POST['quantity'];
-						$price = $_POST['price'];
+							//print_r( $_POST );
+							//$sql = "INSERT INTO Sales (ProductId, Price, Quantity, Date) VALUES (1, 5, 9, '2019-10-3')";
+							$sql = "INSERT INTO Sales (ProductId, Price, Quantity, Date) VALUES((SELECT ProductId FROM Products WHERE ProductName = \"$product\"),\"$price\",\"$quantity\",\"$date\")";
+							//$sql = "INSERT INTO Sales (ProductId, Price, Quantity, Date) VALUES((SELECT ProductId FROM Product WHERE ProductName = '$product'),'$quantity','$price','$date')";
+							//$sql = "INSERT INTO Sales (ProductId, Price, Quantity, Date) VALUES (1, 3, 5, '2019-10-3')";
+							$result = mysqli_query($conn, $sql);
 
+							//$sql = "SELECT * FROM Sales;";
+							//$result = mysqli_query($conn, $sql);
+							//$resultCheck = mysqli_num_rows($result);
 
-						$date_in_seconds = strtotime($_POST['date']);
-						$date = date('Y-m-d', $date_in_seconds);
-
-						//print_r( $_POST );
-						//$sql = "INSERT INTO Sales (ProductId, Price, Quantity, Date) VALUES (1, 5, 9, '2019-10-3')";
-						$sql = "INSERT INTO Sales (ProductId, Price, Quantity, Date) VALUES((SELECT ProductId FROM Products WHERE ProductName = \"$product\"),\"$price\",\"$quantity\",\"$date\")";
-						//$sql = "INSERT INTO Sales (ProductId, Price, Quantity, Date) VALUES((SELECT ProductId FROM Product WHERE ProductName = '$product'),'$quantity','$price','$date')";
-						//$sql = "INSERT INTO Sales (ProductId, Price, Quantity, Date) VALUES (1, 3, 5, '2019-10-3')";
-						$result = mysqli_query($conn, $sql);
-
-						//$sql = "SELECT * FROM Sales;";
-						//$result = mysqli_query($conn, $sql);
-						//$resultCheck = mysqli_num_rows($result);
-
-									// Close everything
+							// Close everything
 							$conn->close();
 
 							} catch(Exception $e) {
 									echo "Oops! Something went wrong: ".$e->getMessage();
 							}
-							?>
+                        }
+                    ?>
             <div id="stockAlert"></div>
 
 		</section>
