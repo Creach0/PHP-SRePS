@@ -1,22 +1,25 @@
 <?php
+    include_once("settings.php");
 
-$dataPoints = array(
-    array("label"=> "Education", "y"=> 284935),
-    array("label"=> "Entertainment", "y"=> 256548),
-    array("label"=> "Lifestyle", "y"=> 245214),
-    array("label"=> "Business", "y"=> 233464),
-    array("label"=> "Music & Audio", "y"=> 200285),
-    array("label"=> "Personalization", "y"=> 194422),
-    array("label"=> "Tools", "y"=> 180337),
-    array("label"=> "Books & Reference", "y"=> 172340),
-    array("label"=> "Travel & Local", "y"=> 118187),
-    array("label"=> "Puzzle", "y"=> 107530)
-);
+    // connects to the database
+    $conn = @mysqli_connect($host, $user, $pwd, $dbnm) or die ('Failed to connect to the database');
 
+    $query = "SELECT ProductName,Stock FROM Products";
+
+    $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
+
+    $dataPoints = array();
+
+    while ($row = $result->fetch_assoc()) {
+        $dataPoints[] = array("label" => $row["ProductName"], "y" => intval($row["Stock"]));
+    }
+
+    mysqli_close($conn);
 ?>
 <!DOCTYPE HTML>
 <html>
 <head>
+
     <script>
         window.onload = function () {
 
@@ -24,10 +27,10 @@ $dataPoints = array(
                 animationEnabled: true,
                 theme: "light2", // "light1", "light2", "dark1", "dark2"
                 title: {
-                    text: "Top 10 Google Play Categories - till 2017"
+                    text: "Current Stock Levels"
                 },
                 axisY: {
-                    title: "Number of Apps",
+                    title: "Quantity Remaining",
                     includeZero: false
                 },
                 data: [{
