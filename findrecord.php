@@ -20,67 +20,66 @@
                     isset($_POST["saleid"]) &&
                     ($_POST["saleid"] != null) &&
                     is_numeric($_POST["saleid"])
-                ) ? htmlspecialchars($_POST["saleid"]) : "";
+                ) ? htmlspecialchars($_POST["saleid"]) : null;
 
                 // Get product name
                 $product = (
                     isset($_POST["product"]) &&
                     ($_POST["product"] != null) &&
                     is_string($_POST["product"])
-                ) ? htmlspecialchars($_POST["product"]) : "";
+                ) ? htmlspecialchars($_POST["product"]) : null;
 
                 // Get quantity
                 $quantity = (
                     isset($_POST["quantity"]) &&
                     ($_POST["quantity"] != null) &&
                     is_numeric($_POST["quantity"])
-                ) ? htmlspecialchars($_POST["quantity"]) : "";
+                ) ? htmlspecialchars($_POST["quantity"]) : null;
 
                 // Get price
                 $price = (
                     isset($_POST["price"]) &&
                     ($_POST["price"] != null) &&
                     is_numeric($_POST["price"])
-                ) ? htmlspecialchars($_POST["price"]) : "";
+                ) ? htmlspecialchars($_POST["price"]) : null;
 
                 // Get date
                 $date = (
                     isset($_POST["date"]) &&
                     ($_POST["date"] != null) &&
                     is_string($_POST["date"])
-                ) ? htmlspecialchars($_POST["date"]) : "";
+                ) ? htmlspecialchars($_POST["date"]) : null;
 
                 // Display search fields
                 echo "
                 <section class=\"centered\">
-                    <form id=\"findrecord\" method=\"post\" action=\"viewrecord.php\">
+                    <form id=\"findrecord\" method=\"post\" action=\"findrecord.php\">
 
                         <label for=\"saleid\">Sale ID:
                         <input type=\"text\" name=\"saleid\" id=\"saleid\"";
-                        if ($saleid != "") echo " value=\"$saleid\""; echo " /></label>(Sale ID overrides other search parameters if used)
+                        if ($saleid != null) echo " value=\"$saleid\""; echo " /></label>(Sale ID overrides other search parameters if used)
 
                         <hr />
 
                         <label for=\"product\">Product:
                         <input type=\"text\" name=\"product\" id=\"product\"";
-                        if ($product != "") echo " value=\"$product\""; echo " /></label>
+                        if ($product != null) echo " value=\"$product\""; echo " /></label>
 
                         <label for=\"quantity\">Quantity:
                         <input type=\"number\" name=\"quantity\" id=\"quantity\"";
-                        if ($quantity != "") echo " value=\"$quantity\""; echo " /></label>
+                        if ($quantity != null) echo " value=\"$quantity\""; echo " /></label>
 
                         <label for=\"price\">Price:
                         <input type=\"text\" name=\"price\" id=\"price\"";
-                        if ($price != "") echo " value=\"$price\""; echo " /></label>
+                        if ($price != null) echo " value=\"$price\""; echo " /></label>
 
                         <label for=\"date\">Date:
                         <input type=\"date\" name=\"date\" id=\"date\"";
-                        if ($date != "") echo " value=\"$date\""; echo " /></label>
+                        if ($date != null) echo " value=\"$date\""; echo " /></label>
 
                         <input type=\"hidden\" id=\"searched\" name=\"searched\" value=1 />
                         <p>
                             <input type=\"submit\" value=\"Search\" />
-                            <input type=\"reset\" value=\"Clear\" />
                         </p>
                     </form>
                 </section>";
@@ -94,10 +93,7 @@
                     if ($conn->connect_error) throw new Exception("Failed to connect to database: ".$conn->connect_error);
 
                     // Update search parameters prior to search
-                    $product = "%$product%";
-                    $quantity = "%$quantity%";
-                    $price = "%$price%";
-                    $date = "%$date%";
+                    $product = ($product == null) ? "%" : "%$product%";
 
                     // Prepare and bind SQL statement
                     // Check if searching for a specific SaleID or not
@@ -109,11 +105,11 @@
                             INNER JOIN Products ON Sales.ProductId=Products.ProductId
                             WHERE
                                 (Products.ProductName LIKE ?)
-                                AND (Sales.Quantity LIKE ?)
-                                AND (Sales.Price LIKE ?)
-                                AND (Sales.Date LIKE ?)
+                                AND ((? IS NULL) OR (Sales.Quantity = ?))
+                                AND ((? IS NULL) OR (Sales.Price = ?))
+                                AND ((? IS NULL) OR (Sales.Date = ?))
                             ORDER BY Sales.SalesId");
-                        $stmt->bind_param("ssss",$product,$quantity,$price,$date);
+                        $stmt->bind_param("sssssss",$product,$quantity,$quantity,$price,$price,$date,$date);
                     } else {
                         $stmt = $conn->prepare("
                             SELECT Sales.SalesId, Products.ProductName, Sales.Quantity, Sales.Price, Sales.Date
