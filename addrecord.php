@@ -5,9 +5,9 @@
 <!DOCTYPE html>
 <html lang="en">
 	<?php echo_head(); ?>
-	<!-- Ideally we remove the </head> from echo_head and the <head> from here but two heads works -->
+	<!-- Ideally we remove the </head> from echo_head() and the <head> from here but two heads works -->
 	<head>
-		<script src="scripts/ValidateInput.js"></script>
+		<script src="scripts/AddRecordValidateInput.js"></script>
 	</head>
 
 	<body>
@@ -43,7 +43,7 @@
 
 
 			<?php
-				if ($_POST['inputValid'] = "true")
+				if ($_POST['inputValid'] == "true")
 				{
 					try {
 							// Connect to database
