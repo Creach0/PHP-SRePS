@@ -18,6 +18,7 @@
 		echo '<nav><ul>
 		<li><a href="index.php">Home</a></li>
 		<li><a href="viewrecord.php">Find Sales Record</a></li>
+		<li><a href="stocklevels.php">Stock Information</a></li>
 		</ul></nav>';
 	}
 
