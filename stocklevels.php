@@ -20,6 +20,11 @@
 <!DOCTYPE HTML>
 <html>
     <head>
+        <meta charset="utf-8" />
+        <meta name="description" content="People Health Pharmacy: Sales Reporting and Prediction System" />
+        <title>PHP-SRePS</title>
+        <link href= "style/style.css" rel="stylesheet" />
+        <script src="scripts/common.js"></script>
         <script>
             window.onload = function () {
 
