@@ -19,7 +19,7 @@
                 if (!isset($_POST["saleid"]) ||
                     ($_POST["saleid"] == null) ||
                     !is_numeric($_POST["saleid"])) {
-                        throw new Exception("Invalid Sale ID");
+                        throw new Exception("Invalid Sale ID. Try <a href=\"viewrecord.php\">searching for a record</a> first.");
                 }
                 $saleid = htmlspecialchars($_POST["saleid"]);
 
