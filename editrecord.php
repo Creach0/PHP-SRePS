@@ -5,6 +5,9 @@
 <!DOCTYPE html>
 <html lang="en">
 	<?php echo_head(); ?>
+    <head>
+		<script src="scripts/EditRecordValidateInput.js"></script>
+    </head>
 	<body>
 		<header>
 			<h1>Sales Records</h1>
@@ -90,37 +93,39 @@
 
                     // Check if saving new data
                     if ($savedata) {
+                        if ($_POST['inputValid'] == "true")
+                        {
+                            // Prepare and bind SQL statement
+                            $stmt = $conn->prepare("
+                                UPDATE Sales
+                                SET
+                                    ProductId = (
+                                        SELECT ProductId
+                                        FROM Products
+                                        WHERE ProductName = ?
+                                    ),
+                                    Quantity = ?,
+                                    Price = ?,
+                                    Date = ?
+                                WHERE SalesId = ?");
+                            $stmt->bind_param("sssss", $product, $quantity, $price, $date, $saleid);
 
-                        // Prepare and bind SQL statement
-                        $stmt = $conn->prepare("
-                            UPDATE Sales
-                            SET
-                                ProductId = (
-                                    SELECT ProductId
-                                    FROM Products
-                                    WHERE ProductName = ?
-                                ),
-                                Quantity = ?,
-                                Price = ?,
-                                Date = ?
-                            WHERE SalesId = ?");
-                        $stmt->bind_param("sssss", $product, $quantity, $price, $date, $saleid);
-
-                        // Execute statement and check for errors
-                        $res = $stmt->execute();
-                        if ($res == false) {
-                            echo "<p>Failed to update sales record.</p>";
-                        } else {
-                            $affected_rows = $stmt->affected_rows;
-                            if ($affected_rows > 0) {
-                                echo "<p>Sale record $saleid was updated.</p>";
+                            // Execute statement and check for errors
+                            $res = $stmt->execute();
+                            if ($res == false) {
+                                echo "<p>Failed to update sales record.</p>";
                             } else {
-                                echo "<p>No changes made.</p>";
+                                $affected_rows = $stmt->affected_rows;
+                                if ($affected_rows > 0) {
+                                    echo "<p>Sale record $saleid was updated.</p>";
+                                } else {
+                                    echo "<p>No changes made.</p>";
+                                }
                             }
-                        }
 
-                        // Close statement
-                        $stmt->close();
+                            // Close statement
+                            $stmt->close();
+                        }
                     }
 
                     //////////////////////////////////
@@ -192,9 +197,11 @@
 
                                 <label for=\"deleterecord\">Delete sales record:
                                 <input type=\"checkbox\" name=\"deleterecord\" id=\"deleterecord\" value=\"yes\" /></label><br />
+                                
+                                <input type=\"hidden\" id=\"inputValid\" name=\"inputValid\" />
 
                                 <p>
-                                    <input type=\"submit\" name=\"save\" value=\"Save\" />
+                                    <input type=\"submit\" name=\"save\" value=\"Save\" onclick=\"validateInput()\" />
                                 </p>
 
                             </form>

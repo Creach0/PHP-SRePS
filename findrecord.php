@@ -5,6 +5,9 @@
 <!DOCTYPE html>
 <html lang="en">
 	<?php echo_head(); ?>
+    <head>
+		<script src="scripts/FindRecordValidateInput.js"></script>
+    </head>
 	<body>
 		<header>
 			<h1>Sales Records</h1>
@@ -77,15 +80,16 @@
                         <input type=\"date\" name=\"date\" id=\"date\"";
                         if ($date != null) echo " value=\"$date\""; echo " /></label>
 
-                        <input type=\"hidden\" id=\"searched\" name=\"searched\" value=1 />
+                        <input type=\"hidden\" id=\"inputValid\" name=\"inputValid\" />
+
                         <p>
-                            <input type=\"submit\" value=\"Search\" />
+                            <input type=\"submit\" value=\"Search\" onclick=\"validateInput()\" />
                         </p>
                     </form>
                 </section>";
 
                 // Check if searching for anything
-                if (isset($_POST["searched"])) {
+                if (isset($_POST["inputValid"]) && ($_POST["inputValid"] == "true")) {
 
                     // Connect to database
                     require_once ("settings.php");
