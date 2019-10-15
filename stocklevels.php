@@ -14,8 +14,6 @@
     while ($row = $result->fetch_assoc()) {
         $dataPoints[] = array("label" => $row["ProductName"], "y" => intval($row["Stock"]));
     }
-
-    mysqli_close($conn);
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -58,6 +56,27 @@
         <section class="centered">
             <div id="chartContainer" style="height: 370px; width: 100%;"></div>
             <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+            <?php
+
+
+                $query = "SELECT ProductName, SUM(Quantity) AS QuantitySold FROM 
+                            Products JOIN Sales ON Products.ProductId = Sales.ProductId
+                            WHERE Date BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE()
+                            GROUP BY ProductName
+                            ORDER BY ProductName";
+
+                $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
+
+                echo mysqli_num_rows($result). "  <br/>";
+
+                while ($row = $result->fetch_assoc()) {
+                    var_dump($row["ProductName"]);
+                    echo "<br/>";
+                    var_dump($row["QuantitySold"]);
+                }
+
+                mysqli_close($conn);
+            ?>
         </section>
 
     </body>
