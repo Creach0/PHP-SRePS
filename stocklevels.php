@@ -59,7 +59,7 @@
             <?php
 
 
-                $query = "SELECT ProductName, SUM(Quantity) AS QuantitySold FROM 
+                $query = "SELECT ProductName, Stock - SUM(Quantity) AS PredictedQuantity FROM 
                             Products JOIN Sales ON Products.ProductId = Sales.ProductId
                             WHERE Date BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE()
                             GROUP BY ProductName
@@ -72,7 +72,7 @@
                 while ($row = $result->fetch_assoc()) {
                     var_dump($row["ProductName"]);
                     echo "<br/>";
-                    var_dump($row["QuantitySold"]);
+                    var_dump($row["PredictedQuantity"]);
                 }
 
                 mysqli_close($conn);
