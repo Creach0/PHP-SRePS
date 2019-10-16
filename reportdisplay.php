@@ -1,5 +1,6 @@
 <?php
   include_once("settings.php");
+  include_once("common.php");
 
   // connects to the database
   $conn = @mysqli_connect($host, $user, $pwd, $dbnm) or die ('Failed to connect to the database');

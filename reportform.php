@@ -1,3 +1,5 @@
+<?php include_once("common.php"); ?>
+
 <!DOCTYPE html>
 <html lang="en">
     <?php echo_head(); ?>
