@@ -58,7 +58,7 @@
             <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
             <?php
                 $query = "SELECT ProductName, Stock - SUM(Quantity) AS PredictedQuantity FROM 
-                                Products JOIN Sales ON Products.ProductId = Sales.ProductId
+                                Products NATURAL JOIN Sales
                                 WHERE Date BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE()
                                 GROUP BY ProductName
                                 HAVING PredictedQuantity <= 0
@@ -73,7 +73,7 @@
                 }
 
                 $query = "SELECT ProductName, Stock - SUM(Quantity) AS PredictedQuantity FROM 
-                            Products JOIN Sales ON Products.ProductId = Sales.ProductId
+                            Products NATURAL JOIN Sales
                             WHERE Date BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE()
                             GROUP BY ProductName
                             HAVING PredictedQuantity <= 0
