@@ -7,7 +7,7 @@
     <header>
         <h1>View Reports</h1>
     </header>
-    <?php echo_nav() ?>
+    <?php echo_nav(); ?>
 
 	<body>
 		<h1>Select Report Specifications</h1>
