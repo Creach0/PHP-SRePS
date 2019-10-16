@@ -5,12 +5,14 @@
     // connects to the database
     $conn = @mysqli_connect($host, $user, $pwd, $dbnm) or die ('Failed to connect to the database');
 
+    // query to get the stock levels of all of the products
     $query = "SELECT ProductName,Stock FROM Products";
 
     $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
 
     $dataPoints = array();
 
+    // Stores the result data in a dataPoints array to be used by the chart
     while ($row = $result->fetch_assoc()) {
         $dataPoints[] = array("label" => $row["ProductName"], "y" => intval($row["Stock"]));
     }
@@ -26,6 +28,7 @@
         <script>
             window.onload = function () {
 
+                // Constructs the chart to be displayed using the results retrieved from the database in the above php script
                 var chart = new CanvasJS.Chart("chartContainer", {
                     animationEnabled: true,
                     theme: "light2", // "light1", "light2", "dark1", "dark2"
@@ -41,6 +44,7 @@
                         dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
                     }]
                 });
+                // Renders the chart in the chartContainter div
                 chart.render();
 
             }
@@ -57,6 +61,7 @@
             <div id="chartContainer" style="height: 370px; width: 100%;"></div>
             <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
             <?php
+                // query to get all of the products expected to be depleted after 7 days
                 $query = "SELECT ProductName, Stock - SUM(Quantity) AS PredictedQuantity FROM 
                                 Products NATURAL JOIN Sales
                                 WHERE Date BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE()
@@ -68,10 +73,12 @@
 
                 $predicted_empty_week = array();
 
+                // stores the result in an array
                 while ($row = $result->fetch_assoc()) {
                     $predicted_empty_week[] = $row["ProductName"];
                 }
 
+                // query to get all of the products expected to be depleted in 30 days
                 $query = "SELECT ProductName, Stock - SUM(Quantity) AS PredictedQuantity FROM 
                             Products NATURAL JOIN Sales
                             WHERE Date BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE()
@@ -83,11 +90,13 @@
 
                 $predicted_empty_month = array();
 
+                // stores data that doesn't already exist in the previous array into a new array
                 while ($row = $result->fetch_assoc()) {
                     if(!in_array($row["ProductName"], $predicted_empty_week))
                         $predicted_empty_month[] = $row["ProductName"];
                 }
 
+                // If there are products expected to be depleted within 30 days, display them
                 if (count($predicted_empty_month)) {
                     echo "<h2>Products predicted to run out within the next 30 days:</h2>";
 
@@ -100,6 +109,7 @@
                     echo "</ul>";
                 }
 
+                // If there are products expected to be depleted within 7 days, display them
                 if (count($predicted_empty_week)) {
                     echo "<h2>Products predicted to run out within the next 7 days:</h2>";
 
@@ -112,6 +122,7 @@
                     echo "</ul>";
                 }
 
+                // closes the mysql connection
                 mysqli_close($conn);
             ?>
         </section>
