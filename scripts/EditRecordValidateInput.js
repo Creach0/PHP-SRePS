@@ -38,7 +38,7 @@ function validateInput()
     if (price == "") {
         errMsg += "Please enter a price.\n";
     }
-    else if (!price.match("^[0-9]*(\.[0-9]{1,2})?$"))
+    else if (!price.toString().match(/[0-9]*(\.[0-9]{1,2})?/))
     {
         errMsg += "Please make sure the price is a positive decimal or integer.\n";
     }
