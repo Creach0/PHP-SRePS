@@ -29,9 +29,12 @@
 
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>SRePS</title>
-	</head>
+    <?php echo_head(); ?>
+    <body>
+    <header>
+        <h1>View Reports</h1>
+    </header>
+    <?php echo_nav() ?>
 
 	<body>
 		<h1>Generated Report</h1>
