@@ -88,9 +88,29 @@
                         $predicted_empty_month[] = $row["ProductName"];
                 }
 
-                var_dump($predicted_empty_week);
-                echo "<br/>";
-                var_dump($predicted_empty_month);
+                if (count($predicted_empty_month)) {
+                    echo "<h2>Products predicted to run out within the next 30 days:</h2>";
+
+                    echo "<ul>";
+
+                    foreach ($predicted_empty_month as $name) {
+                        echo "<li>$name</li>";
+                    }
+
+                    echo "</ul>";
+                }
+
+                if (count($predicted_empty_week)) {
+                    echo "<h2>Products predicted to run out within the next 7 days:</h2>";
+
+                    echo "<ul>";
+
+                    foreach ($predicted_empty_week as $name) {
+                        echo "<li>$name</li>";
+                    }
+
+                    echo "</ul>";
+                }
 
                 mysqli_close($conn);
             ?>
