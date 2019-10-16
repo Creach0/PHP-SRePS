@@ -66,7 +66,7 @@
 
 						//Subtract from existing stock
 						//Quantity in stock = quantity in stock - quantity sold WHERE Product = product
-						$sql = "UPDATE Products SET Stock = Stock - $quantity WHERE ProductName = \"$product\"";
+						$sql = "UPDATE Products SET Stock = Stock - \"$quantity\" WHERE ProductName = \"$product\"";
 						$result = mysqli_query($conn, $sql);
 
 						// Close everything
