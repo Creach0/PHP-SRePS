@@ -120,41 +120,47 @@
                         $stmt->bind_param("s",$saleid);
                     }
 
-                    // Execute statement and bind results
+                    // Execute statement and buffer the result set
                     $stmt->execute();
-                    $stmt->bind_result($saleid,$product,$quantity,$price,$date);
+                    $stmt->store_result();
+
 
                     // Bind and fetch the results
-                    echo "
-                    <p>
-                    <table>
-                        <tr>
-                            <th>Sale ID</th>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Date</th>
-                            <th></th>
-                        </tr>";
-                    while ($stmt->fetch()) {
+                    if ($stmt->num_rows == 0) {
+                        echo "<p>No results found.</p>";
+                    } else {
+                        $stmt->bind_result($saleid,$product,$quantity,$price,$date);
                         echo "
-                        <tr>
-                            <td>$saleid</td>
-                            <td>$product</td>
-                            <td>$quantity</td>
-                            <td>$price</td>
-                            <td>$date</td>
-                            <td>
-                                <form id=\"editrecord\" method=\"post\" action=\"editrecord.php\">
-                                <input type=\"hidden\" id=\"saleid\" name=\"saleid\" value=\"$saleid\" /><br />
-                                <input type=\"submit\" value=\"Edit\" />
-                                </form>
-                            </td>
-                        </tr>";
-                    };
-                    echo "
-                    </table>
-                    </p>";
+                        <p>
+                        <table>
+                            <tr>
+                                <th>Sale ID</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                                <th></th>
+                            </tr>";
+                        while ($stmt->fetch()) {
+                            echo "
+                            <tr>
+                                <td>$saleid</td>
+                                <td>$product</td>
+                                <td>$quantity</td>
+                                <td>$price</td>
+                                <td>$date</td>
+                                <td>
+                                    <form id=\"editrecord\" method=\"post\" action=\"editrecord.php\">
+                                    <input type=\"hidden\" id=\"saleid\" name=\"saleid\" value=\"$saleid\" /><br />
+                                    <input type=\"submit\" value=\"Edit\" />
+                                    </form>
+                                </td>
+                            </tr>";
+                        };
+                        echo "
+                        </table>
+                        </p>";
+                    }
 
                     // Close everything
                     $stmt->close();
