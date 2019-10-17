@@ -85,6 +85,7 @@
 
                     // Close statement
                     $stmt->close();
+
                 } else {
 
                     // Check if saving new data
@@ -122,7 +123,33 @@
                         $stmt->close();
                     }
 
+                    //////////////////////////////////
                     // Prepare and bind SQL statement
+                    // This is to get a list of all valid products
+                    $stmt = $conn->prepare("
+                        SELECT ProductName
+                        FROM Products
+                        ORDER BY ProductName");
+
+                    // Execute statement and buffer the result set
+                    $stmt->execute();
+                    $stmt->store_result();
+
+                    // Bind and fetch the results
+                    // Add the valid products to an array
+                    $productList = array();
+                    $stmt->bind_result($validProduct);
+                    while ($stmt->fetch()) {
+                        array_push($productList, htmlspecialchars($validProduct));
+                    };
+
+                    // Close statement
+                    $stmt->close();
+
+
+                    //////////////////////////////////
+                    // Prepare and bind SQL statement
+                    // This is to get the current information about the requested sale record
                     $stmt = $conn->prepare("
                         SELECT Products.ProductName, Sales.Quantity, Sales.Price, Sales.Date
                         FROM Sales
@@ -145,7 +172,14 @@
                                 <input type=\"text\" name=\"saleid\" id=\"saleid\" value=\"$saleid\" readonly /></label><br />
 
                                 <label for=\"product\">Product:
-                                <input type=\"text\" name=\"product\" id=\"product\" value=\"$product\" /></label><br />
+                                <select name=\"product\" id=\"product\">";
+                        foreach ($productList as $p) {
+                            $s = ($p == $product) ? " selected " : "";
+                            echo "
+                                    <option value=\"$p\"$s>$p</option>";
+                        }
+                        echo "
+                                </select></label><br />
 
                                 <label for=\"quantity\">Quantity:
                                 <input type=\"text\" name=\"quantity\" id=\"quantity\" value=\"$quantity\" /></label><br />
