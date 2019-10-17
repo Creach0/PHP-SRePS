@@ -86,6 +86,12 @@
                     } else {
                         echo "<p>Failed to update:<br/>".$stmt->error."</p>";
                     }
+                        
+                    $quantitydiff = $quantity - mysqli_query($conn, "SELECT Quantity FROM Sales WHERE SaleId = \"$saleid\"");
+
+                    //Subtract from/add existing stock
+                    $sql = "UPDATE Products SET Stock = Stock + \"$quantitydiff\" WHERE ProductName = \"$product\"";
+                    $result = mysqli_query($conn, $sql);
 
                     // Close statement
                     $stmt->close();
