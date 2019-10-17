@@ -13,10 +13,18 @@
 
 		<h2> Add a new Product and its Stock </h2>
 		<section class="centered">
-			<form id="addrecord" method="post" action="addproduct.php">
+			<form id="addrecord" method="post" action="addnewproduct.php">
 
 				<label for="product">Product Name:
 				<input type="text" name="product" id="product" /></label><br/>
+
+				<label for="category">Category ID:
+				<select name="category" id="category" style ="width: 205px;" />
+					<option value="1">Hygiene</option>
+					<option value="2">Medicine</option>
+					<option value="3">Food</option>
+				</select></label><br/>
+
 
 				<label for="quantity">Quantity/Stock:
 				<input type="number" name="quantity" id="quantity" /></label><br/>
@@ -39,12 +47,22 @@
 
 						echo "<p>Connected to database.</p>";
 
-						$product = $_POST['product'];
-						$quantity = $_POST['quantity'];
+
+						if (isset($_POST["product"]) && isset($_POST["category"]) && isset($_POST["quantity"])){
+
+
+							$product = $_POST['product'];
+							$category= $_POST['category'];
+							$quantity = $_POST['quantity'];
+
+						}
+
+						echo "::$product::$category::$quantity::";
+						echo $product;
 
 						//print_r( $_POST );
 						//$sql = "INSERT INTO Sales (ProductId, Price, Quantity, Date) VALUES (1, 5, 9, '2019-10-3')";
-						$sql = "INSERT INTO Products (ProductName,CategoryId, Stock) VALUES(\"$product\",1, $quantity)";
+						$sql = "INSERT INTO Products (ProductName,CategoryId, Stock) VALUES(\"$product\",$category, $quantity)";
 						//$sql = "INSERT INTO Sales (ProductId, Price, Quantity, Date) VALUES((SELECT ProductId FROM Product WHERE ProductName = '$product'),'$quantity','$price','$date')";
 						//$sql = "INSERT INTO Sales (ProductId, Price, Quantity, Date) VALUES (1, 3, 5, '2019-10-3')";
 						$result = mysqli_query($conn, $sql);
