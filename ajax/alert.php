@@ -36,7 +36,7 @@
     $_7_day_items = count($predicted_empty_week);
     $_30_day_items = count($predicted_empty_month);
 
-    if (!count($predicted_empty_month) && !count($predicted_empty_week)) {
+    if (count($predicted_empty_month) || count($predicted_empty_week)) {
         $output = "There ";
         if ($_7_day_items != 1)
             $output .= "are " . $_7_day_items . " products";
@@ -45,9 +45,9 @@
         $output .= " expected to be depleted within the next month and $_30_day_items product";
         if ($_30_day_items != 1)
             $output .= "s";
-        $output .= "expected to be depleted within the next 7 days";
+        $output .= " expected to be depleted within the next 7 days";
 
         echo $output;
     }
-    else echo "";
+    else echo " ";
 ?>
