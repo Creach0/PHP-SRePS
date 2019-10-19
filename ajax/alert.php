@@ -42,10 +42,10 @@
             $output .= "are " . $_7_day_items . " products";
         else
             $output .= "is " . $_7_day_items . " product";
-        $output .= " expected to be depleted within the next month and $_30_day_items product";
+        $output .= " expected to be depleted within the next 7 days and $_30_day_items product";
         if ($_30_day_items != 1)
             $output .= "s";
-        $output .= " expected to be depleted within the next 7 days";
+        $output .= " expected to be depleted within the next month";
 
         echo $output;
     }
