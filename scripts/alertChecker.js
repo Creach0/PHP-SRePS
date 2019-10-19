@@ -2,7 +2,7 @@ var alertShown = false;
 
 window.setInterval(function () {
     $.post('ajax/alert.php', {}, function(data) {
-        if (!alertShown) {
+        if (!alertShown && data != "") {
             alert(data);
             alertShown = true;
         }
