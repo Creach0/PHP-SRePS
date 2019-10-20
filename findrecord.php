@@ -93,12 +93,12 @@
                     if ($conn->connect_error) throw new Exception("Failed to connect to database: ".$conn->connect_error);
 
                     // Update search parameters prior to search
-                    $product = ($product == null) ? "%" : "%$product%";
+                    $productSearch = ($product == null) ? "%" : "%$product%";
 
                     // Prepare and bind SQL statement
                     // Check if searching for a specific SaleID or not
                     $stmt = null;
-                    if ($saleid == "") {
+                    if (($saleid == null) || ($saleid == "")) {
                         $stmt = $conn->prepare("
                             SELECT Sales.SalesId, Products.ProductName, Sales.Quantity, Sales.Price, Sales.Date
                             FROM Sales
@@ -109,7 +109,7 @@
                                 AND ((? IS NULL) OR (Sales.Price = ?))
                                 AND ((? IS NULL) OR (Sales.Date = ?))
                             ORDER BY Sales.SalesId");
-                        $stmt->bind_param("sssssss",$product,$quantity,$quantity,$price,$price,$date,$date);
+                        $stmt->bind_param("sssssss",$productSearch,$quantity,$quantity,$price,$price,$date,$date);
                     } else {
                         $stmt = $conn->prepare("
                             SELECT Sales.SalesId, Products.ProductName, Sales.Quantity, Sales.Price, Sales.Date
@@ -129,6 +129,19 @@
                     if ($stmt->num_rows == 0) {
                         echo "<p>No results found.</p>";
                     } else {
+
+                        // Show button to download results as a CSV
+                        echo "
+                        <form id=\"findrecordcsv\" method=\"post\" action=\"findrecordcsv.php\">
+                            <input type=\"hidden\" name=\"saleid\" id=\"saleid\""; if ($saleid != null) echo " value=\"$saleid\""; echo " />
+                            <input type=\"hidden\" name=\"product\" id=\"product\""; if ($product != null) echo " value=\"$product\""; echo " />
+                            <input type=\"hidden\" name=\"quantity\" id=\"quantity\""; if ($quantity != null) echo " value=\"$quantity\""; echo " />
+                            <input type=\"hidden\" name=\"price\" id=\"price\""; if ($price != null) echo " value=\"$price\""; echo " />
+                            <input type=\"hidden\" name=\"date\" id=\"date\""; if ($date != null) echo " value=\"$date\""; echo " />
+                            <input type=\"submit\" value=\"Download results as CSV file\" />
+                        </form>";
+
+                        // Show search results
                         $stmt->bind_result($saleid,$product,$quantity,$price,$date);
                         echo "
                         <p>
