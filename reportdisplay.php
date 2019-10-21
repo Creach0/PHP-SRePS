@@ -1,5 +1,6 @@
 <?php
   include_once("settings.php");
+  include_once("common.php");
 
   // connects to the database
   $conn = @mysqli_connect($host, $user, $pwd, $dbnm) or die ('Failed to connect to the database');
@@ -29,9 +30,12 @@
 
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>SRePS</title>
-	</head>
+    <?php echo_head(); ?>
+    <body>
+    <header>
+        <h1>View Reports</h1>
+    </header>
+    <?php echo_nav() ?>
 
 	<body>
 		<h1>Generated Report</h1>
