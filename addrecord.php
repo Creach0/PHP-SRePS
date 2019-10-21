@@ -55,16 +55,8 @@
 							$date_in_seconds = strtotime($_POST['date']);
 							$date = date('Y-m-d', $date_in_seconds);
 
-							//print_r( $_POST );
-							//$sql = "INSERT INTO Sales (ProductId, Price, Quantity, Date) VALUES (1, 5, 9, '2019-10-3')";
 							$sql = "INSERT INTO Sales (ProductId, Price, Quantity, Date) VALUES((SELECT ProductId FROM Products WHERE ProductName = \"$product\"),\"$price\",\"$quantity\",\"$date\")";
-							//$sql = "INSERT INTO Sales (ProductId, Price, Quantity, Date) VALUES((SELECT ProductId FROM Product WHERE ProductName = '$product'),'$quantity','$price','$date')";
-							//$sql = "INSERT INTO Sales (ProductId, Price, Quantity, Date) VALUES (1, 3, 5, '2019-10-3')";
 							$result = mysqli_query($conn, $sql);
-
-							//$sql = "SELECT * FROM Sales;";
-							//$result = mysqli_query($conn, $sql);
-							//$resultCheck = mysqli_num_rows($result);
 
 							// Close everything
 							$conn->close();
