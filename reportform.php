@@ -30,5 +30,6 @@
 	      </tr>
 	    </table>
     </form>
+        <div id="stockAlert"></div>
 	</body>
 </html>

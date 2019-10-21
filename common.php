@@ -8,6 +8,8 @@
 		<title>PHP-SRePS</title>
 		<link href= "style/style.css" rel="stylesheet" />
 		<script src="scripts/common.js"></script>
+		<script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
+        <script src="scripts/alertChecker.js"></script>
 	</head>';
 	}
 
