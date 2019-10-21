@@ -1,7 +1,3 @@
-function SetCookie(){
-    document.cookie = "timer=1; max-age=300; path=\\";
-}
-
 window.setInterval(function () {
     $.post('ajax/alert.php', {}, function(data) {
         if (data != "") {

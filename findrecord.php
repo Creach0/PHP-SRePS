@@ -33,6 +33,7 @@
 				</p>
 
 			</form>
+            <div id="stockAlert"></div>
 		</section>
 
 	</body>
