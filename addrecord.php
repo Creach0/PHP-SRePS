@@ -71,7 +71,7 @@
 									echo "Oops! Something went wrong: ".$e->getMessage();
 							}
 							?>
-
+            <div id="stockAlert"></div>
 		</section>
 
 	</body>
