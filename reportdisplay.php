@@ -105,6 +105,12 @@
             ?>
         </table>
 
+        <form id="reportcsv" method="post" action="reportcsv.php">
+            <input type="hidden" id="start_date" name="start_date" value=<?php echo "\"$start_date\"" ?> /><br />
+            <input type="hidden" id="end_date" name="end_date" value=<?php echo "\"$end_date\"" ?> /><br />
+            <input type="submit" value="Download as CSV file" />
+        </form>
+
 	</body>
 </html>
 
