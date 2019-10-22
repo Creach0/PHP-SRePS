@@ -34,7 +34,7 @@
     echo "\"Sales by category\"\n";
     echo "\"Category\",\"Total Sales\"\n";
     while ($stmt->fetch()) {
-        echo "\"$category\",\$$total\n";
+        echo "\"$category\",$total\n";
     };
     echo "\n";
 
@@ -61,7 +61,7 @@
     echo "\"Sales by date\"\n";
     echo "\"Date\",\"Total Sales\"\n";
     while ($stmt->fetch()) {
-        echo "\"$date\",\$$total\n";
+        echo "\"$date\",$total\n";
     };
     echo "\n";
 
@@ -87,7 +87,7 @@
     echo "\"Remaining product stocks\"\n";
     echo "\"Product Name\",\"Amount Left\",\"Remaining product stocks\"\n";
     while ($stmt->fetch()) {
-        echo "\"$product\",$stock,\$$total\n";
+        echo "\"$product\",$stock,$total\n";
     };
     echo "\n";
 
