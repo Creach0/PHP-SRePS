@@ -22,6 +22,9 @@
 		<li><a href="findrecord.php">Find Sales Record</a></li>
 		<li><a href="reportform.php">View Sales Report</a></li>
 		<li><a href="stocklevels.php">Stock Information</a></li>
+		<li><a href="addrecord.php">Add Sale Record</a></li>
+		<li><a href="addnewproduct.php">Add New Products</a></li>
+		<li><a href="addstock.php">Add Product Stock</a></li>
 		</ul></nav>';
 	}
 
