@@ -5,9 +5,12 @@
 <!DOCTYPE html>
 <html lang="en">
 	<?php echo_head(); ?>
+	<head>
+		<script src="scripts/AddProductValidateInput.js"></script>
+	</head>
 	<body>
 		<header>
-			<h1>Sales Records</h1>
+			<h1>Add New Products</h1>
 		</header>
 	<?php echo_nav() ?>
 
@@ -29,8 +32,10 @@
 				<label for="quantity">Quantity/Stock:
 				<input type="number" name="quantity" id="quantity" /></label><br/>
 
+                <input type="hidden" id="inputValid" name="inputValid"/>
+
 				<p>
-					<input type="submit" value="Add" />
+					<input type="submit" value="Add" onclick="return validateInput()" />
 					<input type="reset" value="Clear" />
 				</p>
 
@@ -39,7 +44,9 @@
 
 
 			<?php
-				try {
+                if (isset($_POST['inputValid']) && ($_POST['inputValid'] == "true")) {
+                    try {
+
 						// Connect to database
 						require_once ("settings.php");
 						$conn = new mysqli($host,$user,$pwd,$dbnm);
@@ -49,12 +56,9 @@
 
 
 						if (isset($_POST["product"]) && isset($_POST["category"]) && isset($_POST["quantity"])){
-
-
 							$product = $_POST['product'];
 							$category= $_POST['category'];
 							$quantity = $_POST['quantity'];
-
 						}
 
 
@@ -70,7 +74,8 @@
 							} catch(Exception $e) {
 									echo "Oops! Something went wrong: ".$e->getMessage();
 							}
-							?>
+                        }
+                    ?>
 
 		</section>
 

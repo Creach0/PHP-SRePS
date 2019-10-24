@@ -5,6 +5,9 @@
 <!DOCTYPE html>
 <html lang="en">
 	<?php echo_head(); ?>
+    <head>
+		<script src="scripts/EditRecordValidateInput.js"></script>
+    </head>
 	<body>
 		<header>
 			<h1>Sales Records</h1>
@@ -99,6 +102,7 @@
                                     SELECT ProductId
                                     FROM Products
                                     WHERE ProductName = ?
+                                    LIMIT 1
                                 ),
                                 Quantity = ?,
                                 Price = ?,
@@ -193,8 +197,10 @@
                                 <label for=\"deleterecord\">Delete sales record:
                                 <input type=\"checkbox\" name=\"deleterecord\" id=\"deleterecord\" value=\"yes\" /></label><br />
 
+                                <input type=\"hidden\" id=\"inputValid\" name=\"inputValid\" />
+
                                 <p>
-                                    <input type=\"submit\" name=\"save\" value=\"Save\" />
+                                    <input type=\"submit\" name=\"save\" value=\"Save\" onclick=\"return validateInput()\" />
                                 </p>
 
                             </form>

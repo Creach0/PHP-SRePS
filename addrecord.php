@@ -5,6 +5,10 @@
 <!DOCTYPE html>
 <html lang="en">
 	<?php echo_head(); ?>
+	<!-- Ideally we remove the </head> from echo_head() and the <head> from here but two heads works -->
+	<head>
+		<script src="scripts/AddRecordValidateInput.js"></script>
+	</head>
 	<body>
 		<header>
 			<h1>Sales Records</h1>
@@ -27,13 +31,14 @@
 				<label for="date">Date:
 				<input type="date" name="date" id="date" /></label><br/>
 
+                <input type="hidden" id="inputValid" name="inputValid"/>
+
 				<p>
-					<input type="submit" value="Add" />
+					<input type="submit" value="Add" onclick="return validateInput()" />
 					<input type="reset" value="Clear" />
 				</p>
 
 			</form>
-
 
 			<?php
 				try {
