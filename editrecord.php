@@ -197,7 +197,7 @@
 
                                 <label for=\"deleterecord\">Delete sales record:
                                 <input type=\"checkbox\" name=\"deleterecord\" id=\"deleterecord\" value=\"yes\" /></label><br />
-                                
+
                                 <input type=\"hidden\" id=\"inputValid\" name=\"inputValid\" />
 
                                 <p>
