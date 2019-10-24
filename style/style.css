@@ -18,12 +18,12 @@ nav {
 	padding: 10px 0;
 	text-align: center;
 }
-
 nav ul {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 }
+
 
 nav ul li {
 	float: left;
@@ -61,7 +61,6 @@ section.centered {
 	min-width: 330px;
 	max-width: 560px;
 }
-
 section.centered label {
 	display: flex;
 	flex-direction: row;
