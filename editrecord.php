@@ -201,7 +201,7 @@
                                 <input type=\"hidden\" id=\"inputValid\" name=\"inputValid\" />
 
                                 <p>
-                                    <input type=\"submit\" name=\"save\" value=\"Save\" onclick=\"validateInput()\" />
+                                    <input type=\"submit\" name=\"save\" value=\"Save\" onclick=\"return validateInput()\" />
                                 </p>
 
                             </form>

@@ -34,7 +34,7 @@
 
 				<input type="hidden" id="inputValid" name="inputValid"/>
 				<p>
-					<input type="submit" value="Add" onclick="validateInput()" />
+					<input type="submit" value="Add" onclick="return validateInput()" />
 					<input type="reset" value="Clear" />
 				</p>
 

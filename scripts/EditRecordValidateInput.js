@@ -16,7 +16,7 @@ function validateInput()
     var quantity = document.getElementById("quantity").value;
     var price = document.getElementById("price").value;
     var date = document.getElementById("date").value;
-    
+
     if (isNaN(saleid)) {
         errMsg += "Please make sure the sale ID is a non-negative integer.\n";
     }
@@ -45,10 +45,10 @@ function validateInput()
     if (date == "") {
         errMsg += "Please enter a date.\n";
     }
-    
+
 
     var inputValid = errMsg == "";
-    
+
     //returns lowercase true or false in inputValid field.
     document.getElementById("inputValid").value = inputValid.toString();
 
@@ -56,5 +56,8 @@ function validateInput()
 
 	if (!inputValid) {
 		alert(errMsg)
+        return false;
+    } else {
+        return true;
     }
 }

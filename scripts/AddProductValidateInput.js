@@ -26,16 +26,19 @@ function validateInput()
     else if (parseInt(quantity) < 0) {
         errMsg += "Please make sure your quantity is non-negative.\n";
     }
-    
+
 
     var inputValid = errMsg == "";
-    
+
     //returns lowercase true or false in inputValid field.
     document.getElementById("inputValid").value = inputValid.toString();
 
     console.log("IN validateInput: inputValid found to be " + inputValid.toString() + ", errMsg reads \"" +errMsg+"\"");
 
 	if (!inputValid) {
-		alert(errMsg)
+		alert(errMsg);
+        return false;
+    } else {
+        return true;
     }
 }

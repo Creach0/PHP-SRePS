@@ -83,7 +83,7 @@
                         <input type=\"hidden\" id=\"inputValid\" name=\"inputValid\" />
 
                         <p>
-                            <input type=\"submit\" value=\"Search\" onclick=\"validateInput()\" />
+                            <input type=\"submit\" value=\"Search\" onclick=\"return validateInput()\" />
                         </p>
                     </form>
                 </section>";
