@@ -35,15 +35,16 @@
 			</form>
 
 
-
 			<?php
 				try {
+
 						// Connect to database
 						require_once ("settings.php");
 						$conn = new mysqli($host,$user,$pwd,$dbnm);
 						if ($conn->connect_error) throw new Exception("Failed to connect to database: ".$conn->connect_error);
 
 						echo "<p>Connected to database.</p>";
+
 
 						$product = $_POST['product'];
 						$quantity = $_POST['quantity'];
@@ -72,6 +73,7 @@
 							}
 							?>
             <div id="stockAlert"></div>
+
 		</section>
 
 	</body>
