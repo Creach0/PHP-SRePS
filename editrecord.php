@@ -93,39 +93,38 @@
 
                     // Check if saving new data
                     if ($savedata) {
-                        if ($_POST['inputValid'] == "true")
-                        {
-                            // Prepare and bind SQL statement
-                            $stmt = $conn->prepare("
-                                UPDATE Sales
-                                SET
-                                    ProductId = (
-                                        SELECT ProductId
-                                        FROM Products
-                                        WHERE ProductName = ?
-                                    ),
-                                    Quantity = ?,
-                                    Price = ?,
-                                    Date = ?
-                                WHERE SalesId = ?");
-                            $stmt->bind_param("sssss", $product, $quantity, $price, $date, $saleid);
 
-                            // Execute statement and check for errors
-                            $res = $stmt->execute();
-                            if ($res == false) {
-                                echo "<p>Failed to update sales record.</p>";
+                        // Prepare and bind SQL statement
+                        $stmt = $conn->prepare("
+                            UPDATE Sales
+                            SET
+                                ProductId = (
+                                    SELECT ProductId
+                                    FROM Products
+                                    WHERE ProductName = ?
+                                    LIMIT 1
+                                ),
+                                Quantity = ?,
+                                Price = ?,
+                                Date = ?
+                            WHERE SalesId = ?");
+                        $stmt->bind_param("sssss", $product, $quantity, $price, $date, $saleid);
+
+                        // Execute statement and check for errors
+                        $res = $stmt->execute();
+                        if ($res == false) {
+                            echo "<p>Failed to update sales record.</p>";
+                        } else {
+                            $affected_rows = $stmt->affected_rows;
+                            if ($affected_rows > 0) {
+                                echo "<p>Sale record $saleid was updated.</p>";
                             } else {
-                                $affected_rows = $stmt->affected_rows;
-                                if ($affected_rows > 0) {
-                                    echo "<p>Sale record $saleid was updated.</p>";
-                                } else {
-                                    echo "<p>No changes made.</p>";
-                                }
+                                echo "<p>No changes made.</p>";
                             }
-
-                            // Close statement
-                            $stmt->close();
                         }
+
+                        // Close statement
+                        $stmt->close();
                     }
 
                     //////////////////////////////////
